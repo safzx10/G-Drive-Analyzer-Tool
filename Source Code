@@ -1,0 +1,126 @@
+import os.path
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from colorama import Fore, Back, Style, init
+
+# Initialize colorama
+init(autoreset=True)
+
+# If modifying these scopes, delete the file token.json.
+SCOPES = [
+    "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.metadata",
+]
+
+def authenticate_and_build_service():
+    """Authenticate and build the Drive API service."""
+    creds = None
+    try:
+        # The file token.json stores the user's access and refresh tokens and is
+        # created automatically when the authorization flow completes for the first time.
+        if os.path.exists("token.json"):
+            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    
+                    "C:\\Users\\safz1\\Downloads\\client_secret_6316533837-rajmdv3t7gj2ope0kd04ijsip928ncu6.apps.googleusercontent.com.json", SCOPES
+                )
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open("token.json", "w") as token:
+                token.write(creds.to_json())
+    except (FileNotFoundError, HttpError) as e:
+        print(f"{Fore.RED}Error: {e}")
+        print(f"Please {Fore.YELLOW}reauthorize{Fore.RED} the application.")
+        return None
+    # Build the service
+    service = build("drive", "v3", credentials=creds)
+    return service
+
+def get_item_link(item):
+    """Get the link for a file or folder."""
+    item_id = item.get("id")
+    return f"{Fore.BLUE}https://drive.google.com/drive/folders/{item_id}" if item.get("mimeType") == "application/vnd.google-apps.folder" else f"{Fore.BLUE}https://drive.google.com/file/d/{item_id}"
+
+def get_item_size(service, item_id):
+    """Get the size of a file or folder."""
+    try:
+        item = service.files().get(fileId=item_id, fields="size").execute()
+        size_in_bytes = int(item.get("size", 0))
+        if size_in_bytes == 0:
+            return f"{Fore.MAGENTA}Unknown Size"
+        
+        # Convert size to MB or GB
+        if size_in_bytes < 1024 * 1024:
+            return f"{Fore.MAGENTA}{size_in_bytes / 1024:.2f} KB"
+        elif size_in_bytes < 1024 * 1024 * 1024:
+            return f"{Fore.MAGENTA}{size_in_bytes / (1024 * 1024):.2f} MB"
+        else:
+            return f"{Fore.MAGENTA}{size_in_bytes / (1024 * 1024 * 1024):.2f} GB"
+    except HttpError as error:
+        print(f"{Fore.RED}Error retrieving size: {error}")
+        return f"{Fore.MAGENTA}Unknown Size"
+
+def analyze_access_permissions(service, folder_id='root'):
+    """Analyze access permissions, size, and access levels for all files, folders, and subfolders."""
+    try:
+        query = f"'{folder_id}' in parents"
+        results = service.files().list(
+            q=query, pageSize=1000, fields="files(id, name, mimeType, permissions)"
+        ).execute()
+        items = results.get("files", [])
+
+        if not items:
+            print(f"{Fore.GREEN}No files/folders found in the specified folder.")
+        else:
+            for item in items:
+                item_link = get_item_link(item)
+                item_size = get_item_size(service, item['id'])
+                print(f"{Fore.GREEN}{item['name']} ({item['id']}) - Link: {item_link}, Size: {item_size}")
+
+                # Check if 'mimeType' key is present and the item is a folder
+                if 'mimeType' in item and item['mimeType'] == 'application/vnd.google-apps.folder':
+                    permissions = item.get("permissions", [])
+                    if not permissions:
+                        print(f"  - No permissions found for the folder")
+                    else:
+                        for permission in permissions:
+                            role = permission.get("role", "Unknown Role")
+                            type_ = permission.get("type", "Unknown Type")
+                            email_address = permission.get("emailAddress", "Unknown Email")
+                            print(f"  - Role: {Fore.MAGENTA}{role}, Type: {Fore.YELLOW}{type_}, Email: {Fore.CYAN}{email_address}")
+
+                            # Recursively analyze permissions for subfolders
+                            analyze_access_permissions(service, folder_id=item['id'])
+                elif 'mimeType' not in item:
+                    print(f"  - Not a folder")
+
+                permissions = item.get("permissions", [])
+                if not permissions:
+                    print(f"  - No permissions found for the file")
+                else:
+                    for permission in permissions:
+                        role = permission.get("role", "Unknown Role")
+                        type_ = permission.get("type", "Unknown Type")
+                        email_address = permission.get("emailAddress", "Unknown Email")
+                        print(f"  - Role: {Fore.MAGENTA}{role}, Type: {Fore.YELLOW}{type_}, Email: {Fore.CYAN}{email_address}")
+
+    except HttpError as error:
+        print(f"{Fore.RED}An error occurred: {error}")
+
+def main():
+    service = authenticate_and_build_service()
+    root_folder_id = 'root'  # Replace with the desired folder ID or use 'root' for the entire Drive
+    analyze_access_permissions(service, folder_id=root_folder_id)
+
+if __name__ == "__main__":
+    main()
+    
