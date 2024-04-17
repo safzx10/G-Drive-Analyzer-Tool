@@ -1,143 +1,100 @@
-# Welcome to StackEdit!
+# Getting Started
 
-Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about StackEdit, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
+## Google Drive Access Permission Analyzer
 
+A tool designed for **Analyzing the Access Permission details of all the files and folders** for a given google drive account. This explains the entire flow of the script, including the sequence of authorizations leading to the execution of the results.  
 
-# Files
+## Requirements
 
-StackEdit stores your files in your browser, which means all your files are automatically saved locally and are accessible **offline!**
+-   A **platform** that support the execution of python scripts, here in this case **Visual Studio Code** application has been and to receive the result in the VS Code terminal itself, the **interpreter** selected here is **Python 3.12** (can be installed from **Microsoft Store** or directly from the official webpage of Python Organization [Download Python](https://www.python.org/downloads/))
+    
+-   **Enabled Google Drive API** for the account to be analyzed
+    
+-   **Script** to execute the flow of the tool **GDAPA**
+    
+-   A **credentials.json** file
+    
+-   A **token.json** file
 
-## Create files and folders
+## Workflow Execution
 
-The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+-   Create a **directory** at your desired path and **save the script** in that directory.
 
-## Switch to another file
+-   **Enable** the Google Drive API. To enable [click here](https://console.cloud.google.com/projectselector2/apis/enableflow?apiid=drive.googleapis.com&supportedpurview=project&authuser=1)
+    
+-   To create credentials, the **OAuth consent screen** has to be configured from **Google Cloud**
+    
+		Google Cloud > API & Services > OAuth consent screen
 
-All your files and folders are presented as a tree in the file explorer. You can switch from one to another by clicking a file in the tree.
+-   Once configured, **create credentials** required from
+    
+		Google Cloud > API & Services > Credentials
 
-## Rename a file
+-   **Download** the credentials and **rename the file** as mentioned below, and save them in the **same directory** where the script exists
 
-You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+		credentials.json
+    
+    ## Reference
+   
+-  To view the **sample script** of the **credential.json** file, [click here](https://drive.google.com/file/d/1w0Plsw4o2lA3ugIZQLwCzBsmzHDGc5xI/view?usp=sharing)
 
-## Delete a file
+    
+- For **more information** regarding the creation of credentials, watch the video reference by  [clicking here](https://drive.google.com/file/d/1oUV-tBHhHJ9TEkvZdyL6v8_QtJeuWcr1/view?usp=sharing)
 
-You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
+  ## Script Execution 
 
-## Export a file
+-   Now initiate the script in VS Code and launch the terminal to execute
+    
 
-You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
+![](https://lh7-us.googleusercontent.com/w2hrDZ79mVzNyEl_aanNpLYTi2cCds41kqMsbm3j5GsucD68NJ1NSz3TpAC8UgLL-UgrE8UgN_pYK2k_AX068JptJKMizOOETkTaKAjaJ1fg9_gqKNxz5QM4b6c5TcSg0Ji9q5lRmSvyF-KP-3OEB9g)
 
+- To execute the script flawlessly, the below mentioned modules has to be installed,
 
-# Synchronization
+		pip install google-auth google-auth-oauthlib google-api-python-client 
+		pip install colorama
+		pip install tabulate
+		
+-   In the terminal, **navigate to the folder** that contains the script and the credentials.
 
-Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
+-   Check whether all the required files are present the directory created,
 
-There are two types of synchronization and they can complement each other:
+		ls
+    
+-   Run the script using this command, which is used to execute the output,
 
-- The workspace synchronization will sync all your files, folders and settings automatically. This will allow you to fetch your workspace on any other device.
-	> To start syncing your workspace, just sign in with Google in the menu.
+		 gdapa -o O
+    
 
-- The file synchronization will keep one file of the workspace synced with one or multiple files in **Google Drive**, **Dropbox** or **GitHub**.
-	> Before starting to sync files, you must link an account in the **Synchronize** sub-menu.
+-   When the script is executed for the first time, the authentication flow occurs, and upon completion of the flow, the **token.json** file is **automatically generated** and saved in the same path where the script and the credentials exist.
+    
 
-## Open a file
-
-You can open a file from **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Open from**. Once opened in the workspace, any modification in the file will be automatically synced.
-
-## Save a file
-
-You can save any file of the workspace to **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Save on**. Even if a file in the workspace is already synced, you can save it to another location. StackEdit can sync one file with multiple locations and accounts.
-
-## Synchronize a file
-
-Once your file is linked to a synchronized location, StackEdit will periodically synchronize it by downloading/uploading any modification. A merge will be performed if necessary and conflicts will be resolved.
-
-If you just have modified your file and you want to force syncing, click the **Synchronize now** button in the navigation bar.
-
-> **Note:** The **Synchronize now** button is disabled if you have no file to synchronize.
-
-## Manage file synchronization
-
-Since one file can be synced with multiple locations, you can list and manage synchronized locations by clicking **File synchronization** in the **Synchronize** sub-menu. This allows you to list and remove synchronized locations that are linked to your file.
-
-
-# Publication
-
-Publishing in StackEdit makes it simple for you to publish online your files. Once you're happy with a file, you can publish it to different hosting platforms like **Blogger**, **Dropbox**, **Gist**, **GitHub**, **Google Drive**, **WordPress** and **Zendesk**. With [Handlebars templates](http://handlebarsjs.com/), you have full control over what you export.
-
-> Before starting to publish, you must link an account in the **Publish** sub-menu.
-
-## Publish a File
-
-You can publish your file by opening the **Publish** sub-menu and by clicking **Publish to**. For some locations, you can choose between the following formats:
-
-- Markdown: publish the Markdown text on a website that can interpret it (**GitHub** for instance),
-- HTML: publish the file converted to HTML via a Handlebars template (on a blog for example).
-
-## Update a publication
-
-After publishing, StackEdit keeps your file linked to that publication which makes it easy for you to re-publish it. Once you have modified your file and you want to update your publication, click on the **Publish now** button in the navigation bar.
-
-> **Note:** The **Publish now** button is disabled if your file has not been published yet.
-
-## Manage file publication
-
-Since one file can be published to multiple locations, you can list and manage publish locations by clicking **File publication** in the **Publish** sub-menu. This allows you to list and remove publication locations that are linked to your file.
+## Reference Captures Output Execution along with Authentication Flow  
 
 
-# Markdown extensions
-
-StackEdit extends the standard Markdown syntax by adding extra **Markdown extensions**, providing you with some nice features.
-
-> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
 
 
-## SmartyPants
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                |ASCII                          |HTML                         |
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
 
 
-## KaTeX
+![](https://lh7-us.googleusercontent.com/Qdxk9hC6KEOXxKdaBFOlpZND-dlAGMNYxfmct8h6ZYKrgdNEMt1uP7zXzXskgwU2RoQYqLVYqLMB-77UPDgwaYuP8i6YqLJAIXiEwvq8nwdFgeH3Z8eQJxS99AbxjO2GvGircmrEw94n-MT0z5j-Xls)
 
-You can render LaTeX mathematical expressions using [KaTeX](https://khan.github.io/KaTeX/):
+![](https://lh7-us.googleusercontent.com/GTiDhR9jWmebR-l4YFL3eQrcDejH55Y3N_dL5V96e4JTPQFQK0o73jFWU_hLIO-gz9R17ZnIrNDN-jZrg_QHdjrrmmyBpcO8VoED5kFnN-XjSka742hTEO6gKHCCl-ReazZSYOXgdFSZFjwYtnspIUs)
 
-The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
+![](https://lh7-us.googleusercontent.com/jZNTWCxDvYYLCj3GCuK_BCNtBymZyQvkuCg_VY_ifoM7AjiouwjQf84SvirDB4zyIgJjoxEXT9Nfa3XpRbSu5ah9Jo466pVyZiTk7JWV5Yuy5DgvPSSxcnVF66ZNyrW6Teo3hX-4Baaf93fPYhpAMxY)
 
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
+![](https://lh7-us.googleusercontent.com/9nlAFJZbifMMH1oAeY_KhH0HNcYMHFCFPKZPwSUxID8_i9baVnuXa_IlmzkF4JWHOPAWojJVVOuMRd-U7O5XG7eaUZ8SkC-PxtpbnpVjdY99FG1zlQcFGcLINw1bXRUznaI6l1JhuHPOPi9ThWAh2NQ)
+  ![](https://lh7-us.googleusercontent.com/AdI6uiLsJO2b47sM2fJGYLV8NGWhUAoVNzwMsOOT_h7mJW7V9VFsoCYpw5vypYkQQDKXj1Z39ITBQgAGY4q8zC0XM0y4Spzuqg2sqoW8k9MS9J8TKTZoVrpQqrdVPIAmXqWy4Gl-l8RrqwdM4NCRJjY)
 
-> You can find more information about **LaTeX** mathematical expressions [here](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference).
+- **Return** to Visual Studio Code and **catch a glimpse of the output** of the executed script
+![](https://lh7-us.googleusercontent.com/bILmwhNX0NvXi_-KVg8FIhm_WkPlhgKhbecRbE9PTrAsXoDOg5IloywHuLmOSP2SOwtUfos-k0AQT1I7b12tdFQp0WRpgzy6w9Kw9YVS-xK0ZqxnOIPBwL9z3Bcam5PiMn25YQimdJzhIOPBFD6qSgQ)
+
+-   Once the output gets executed again **list the files** inside the folder, here **token.json** will be there present
+
+		 ls
+
+![](https://lh7-us.googleusercontent.com/iVG0VIuzKgZNlu_V2KNBrKOpMgdlp_8OdN_UQhBZ3IHJuZZXfTRSy3rie_q0WqrWGdRyl-aUSnwI_g78vwRaGnk_chuo5HvHSZyqeHrk7upvc4T0exHFsEvLNN_H8Z91JENTftV3LH_DyvcX1QhNTj8)
 
 
-## UML diagrams
 
-You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
 
-```mermaid
-sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
 
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
-```
 
-And this will produce a flow chart:
-
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
-```
